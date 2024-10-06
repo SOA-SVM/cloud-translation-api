@@ -60,18 +60,6 @@ response = send_translation_request(api_key, texts, target_language)
 parsed_response = parse_response(response)
 translations = extract_translations(parsed_response)
 
-translations.each_with_index do |translation, index|
-  original_text = texts[index]
-  translated_text = translation[:translated_text]
-  detected_language = translation[:detected_source_language]
-
-  puts "Original Text #{index + 1}: #{original_text}"
-  puts "Translated Text: #{translated_text}"
-  puts "Detected Source Language: #{detected_language}"
-
-  puts '---------------------------'
-end
-
 save_to_yaml('spec/fixtures/translation-results.yml', texts, translations)
 
 puts 'Translation result saved to spec/fixtures/translation-results.yml'
