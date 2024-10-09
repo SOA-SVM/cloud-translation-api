@@ -1,0 +1,11 @@
+---
+# Apply latest style guide and new cops
+AllCops:
+  TargerRubyVersion: 3.3.5
+  NewCops: enable
+
+# ignore block length in test code only
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - spec/**/*
