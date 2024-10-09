@@ -4,7 +4,7 @@ require 'http'
 require 'yaml'
 
 def load_config
-  YAML.safe_load(File.read('config/secrets.yml'))
+  YAML.safe_load_file('config/secrets.yml')
 end
 
 def trans_api_path
@@ -26,22 +26,8 @@ def parse_response(response)
   JSON.parse(response.body.to_s)
 end
 
-def extract_translations(parsed_response)
-  parsed_response['data']['translations'].map do |translation|
-    {
-      translated_text: translation['translatedText'],
-      detected_source_language: translation['detectedSourceLanguage']
-    }
-  end
-end
-
-def save_to_yaml(file_path, texts, translations)
-  File.open(file_path, 'w') do |file|
-    file.write({
-      texts:,
-      translations:
-    }.to_yaml)
-  end
+def save_to_yaml(file_path, translations)
+  File.write(file_path, translations.to_yaml)
 end
 
 config = load_config
@@ -58,8 +44,8 @@ target_language = 'zh-TW'
 response = send_translation_request(api_key, texts, target_language)
 
 parsed_response = parse_response(response)
-translations = extract_translations(parsed_response)
+translations = parsed_response['data']
 
-save_to_yaml('spec/fixtures/translation-results.yml', texts, translations)
+save_to_yaml('spec/fixtures/translation_results.yml', translations)
 
 puts 'Translation result saved to spec/fixtures/translation-results.yml'
